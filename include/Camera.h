@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <glad/glad.h>
 
 #include <glm/glm.hpp>
@@ -41,6 +42,8 @@ public:
 
 
 	glm::mat4 GetViewMatrix();
+
+	glm::mat4 GetProjectionMatrix(float aspect);
 
 	void ProcessKeyboard(Camera_Movement direction, float deltaTime);
 	void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);

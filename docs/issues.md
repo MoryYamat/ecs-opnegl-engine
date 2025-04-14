@@ -4,7 +4,7 @@
 # **Engine**
 
 ## **window**
-* Automatically adjust the viewport and object size based on the window size
+* ~~Automatically adjust the viewport and object size based on the window size~~(2025/04/15)
 
 
 

@@ -26,8 +26,8 @@
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
 // ウィンドウ大きさ
-const unsigned int WIDTH = 800;
-const unsigned int HEIGHT = 600;
+unsigned int WIDTH = 800;
+unsigned int HEIGHT = 600;
 
 
 
@@ -36,6 +36,10 @@ Camera camera = Camera();
 float lastX = WIDTH / 2.0f;
 float lastY = HEIGHT / 2.0f;
 bool firstMouse = true;
+
+float aspect = static_cast<float>(WIDTH) / static_cast<float>(HEIGHT);
+glm::mat4 projection;
+
 
 // dletaTime
 float deltaTime = 0.0f;
@@ -133,6 +137,7 @@ int main()
 	// tell GLFW to caputure our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	//GLAD初期化
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -192,6 +197,8 @@ int main()
 	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+	
+
 	//====================================================================================
 	// ECS テスト領域
 	//====================================================================================
@@ -233,6 +240,9 @@ int main()
 		//input
 		processInput(window);
 
+		//window aspect
+
+		
 
 		//
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // ← ★深度バッファもクリアする！
@@ -248,12 +258,13 @@ int main()
 		shader.use();
 		shader.setInt("ourTexture", 0);
 
-		//
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+		//ビュー変換行列
+		glm::mat4 view = camera.GetViewMatrix();
+		//投影行列
+		glm::mat4 projection = camera.GetProjectionMatrix(aspect);
+		
 		shader.setMat4("projection", projection);
 
-		//
-		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("view", view);
 
 
@@ -287,6 +298,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// 
 	glViewport(0, 0, width, height);
+	aspect = static_cast<float>(width) / static_cast<float>(height);
+	camera.GetProjectionMatrix(aspect);
+	std::cout << "Changed Window size: "
+		<< " WIDTH: " << width
+		<< ", HEIGHT: " << height
+		<< ", Aspect: " << aspect;
+
 }
 
 void processInput(GLFWwindow* window)

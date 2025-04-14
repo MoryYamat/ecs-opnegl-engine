@@ -30,7 +30,7 @@ public:
 		return Entity{ nextEntityID++ };
 	}
 	
-	// Add any component to an Entity(任意のコンポーネント追加)
+	// Add any component to an Entity(任意のコンポーネント追加)（データインスタンスのコピー）
 	template<typename T>
 	void addComponent(Entity e, T component) {
 		const std::type_index type = std::type_index(typeid(T));
