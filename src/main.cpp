@@ -26,8 +26,8 @@
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
 // ウィンドウ大きさ
-unsigned int WIDTH = 800;
-unsigned int HEIGHT = 600;
+const unsigned int WIDTH = 1280;
+const unsigned int HEIGHT = 760;
 
 
 
@@ -39,7 +39,6 @@ bool firstMouse = true;
 
 float aspect = static_cast<float>(WIDTH) / static_cast<float>(HEIGHT);
 glm::mat4 projection;
-
 
 // dletaTime
 float deltaTime = 0.0f;
@@ -102,7 +101,9 @@ void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
+bool mouseCaptured = true;
 
+static bool escapeKeyPressedLastFrame = false;
 
 int main()
 {
@@ -117,7 +118,7 @@ int main()
 	//OpenGL3.3 Coreprofile
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE );
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Window作成
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Game", nullptr, nullptr);
@@ -197,7 +198,7 @@ int main()
 	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	
+
 
 	//====================================================================================
 	// ECS テスト領域
@@ -242,7 +243,7 @@ int main()
 
 		//window aspect
 
-		
+
 
 		//
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // ← ★深度バッファもクリアする！
@@ -262,7 +263,7 @@ int main()
 		glm::mat4 view = camera.GetViewMatrix();
 		//投影行列
 		glm::mat4 projection = camera.GetProjectionMatrix(aspect);
-		
+
 		shader.setMat4("projection", projection);
 
 		shader.setMat4("view", view);
@@ -298,22 +299,24 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// 
 	glViewport(0, 0, width, height);
+
+	// 
 	aspect = static_cast<float>(width) / static_cast<float>(height);
 	camera.GetProjectionMatrix(aspect);
 	std::cout << "Changed Window size: "
-		<< " WIDTH: " << width
-		<< ", HEIGHT: " << height
-		<< ", Aspect: " << aspect;
+		<< " width: " << width
+		<< ", height: " << height
+		<< ", aspect: " << aspect;
 
 }
 
 void processInput(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
-
+	// movement
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -322,6 +325,27 @@ void processInput(GLFWwindow* window)
 		camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
+
+	// mouse capture 
+	int escapeKeyState = glfwGetKey(window, GLFW_KEY_ESCAPE);
+	if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && !escapeKeyPressedLastFrame)
+		if (mouseCaptured)
+		{
+			// Enable Moues Capture
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			mouseCaptured = false;
+
+			firstMouse = true;
+		}
+		else 
+		{
+			// Disable Mouse Capture
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			mouseCaptured = true;
+		}
+
+	escapeKeyPressedLastFrame = (escapeKeyState == GLFW_PRESS);
+	//std::cout << "escapeKeyState:  " << escapeKeyState << std::endl;
 }
 
 

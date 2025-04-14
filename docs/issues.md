@@ -10,7 +10,7 @@
 
 
 ## **user input**
-* Release mouse capture when the Control key is pressed
+* ~~Release mouse capture when the Control key is pressed~~(2025/04/15)
 
 
 
@@ -22,6 +22,8 @@
 ## **Lighting**
 * Add lighting support
 
+
+---
 
 # **Game**
 
