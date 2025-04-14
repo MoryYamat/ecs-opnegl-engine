@@ -5,13 +5,14 @@
 * This project is a study in low-level graphics programming and modular game logic design.
 
 
-## Features
+## **Features**
 - Custom ECS implementation in C++
 - OpenGL-based 3D rendering
 
 
-## Libraries used
+## **Libraries used**
 - GLAD
 - GLFW
 - GLM
 - stb
+

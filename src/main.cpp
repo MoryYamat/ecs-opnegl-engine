@@ -22,9 +22,14 @@
 
 #include "RenderSystem.h"
 
+//ウィンドウの大きさに応じて描画範囲と大きさを変更
+//ウィンドウの大きさに応じて描画範囲と大きさを変更
+//ウィンドウの大きさに応じて描画範囲と大きさを変更
 // ウィンドウ大きさ
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
+
+
 
 //Camera
 Camera camera = Camera();
@@ -120,6 +125,7 @@ int main()
 
 	// `window`を作業コンテキストに指定
 	glfwMakeContextCurrent(window);
+
 
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
