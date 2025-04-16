@@ -15,6 +15,11 @@
 #include "Shader.h"
 #include "Camera.h"
 
+// assimip
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 // ECS
 #include "Entity.h"
 #include "ECS.h"
@@ -107,6 +112,40 @@ static bool escapeKeyPressedLastFrame = false;
 
 int main()
 {
+	//=================================================
+	// Assimpテスト
+	//=================================================
+	//Assimp::Importer importer;
+	//
+	//// モデルを読み込むパス
+	//const std::string modelPath = "Assets/Models/Ch44_nonPBR.fbx";
+
+	////モデルを読み込む(UV反転+ 三角形化)
+	//const aiScene* scene = importer.ReadFile(modelPath,
+	//	aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	//// 読み込みチェック
+	//if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+	//	std::cerr << "Assimp  error: " << importer.GetErrorString() << std::endl;
+	//	return -1;
+	//}
+
+	////情報出力
+	//std::cout << "Model loaded" << modelPath << std::endl;
+	//std::cout << "Number of meshes: " << scene->mNumMeshes << std::endl;
+
+	//for (unsigned int i = 0; i < scene->mNumMeshes; ++i) {
+	//	aiMesh* mesh = scene->mMeshes[i];
+	//	std::cout << "Mesh " << i << ": " << mesh->mNumVertices << "vertices" << std::endl;
+	//}
+
+	//return 0;
+
+	//=================================================
+	// Assimp
+	//=================================================
+
+
 	//std::cout << "Current Path: " << std::filesystem::current_path() << std::endl;
 
 	//GLFW初期化

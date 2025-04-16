@@ -17,6 +17,16 @@ set_target_properties(glfw PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/External/GLFW/include"
 )
 
+# ASSIMP
+add_library(assimp STATIC IMPORTED)
+set_target_properties(assimp PROPERTIES
+    IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/External/Assimp/lib/assimp-vc143-mt.lib"
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/External/Assimp/include"
+)
+
+set(ASSIMP_DLL "${CMAKE_SOURCE_DIR}/External/Assimp/bin/Release/assimp-vc143-mt.dll")
+
+
 # GLAD（ソースからビルド）
 add_library(glad STATIC
     ${CMAKE_SOURCE_DIR}/External/GLAD/src/glad.c
@@ -46,6 +56,7 @@ add_executable(ClashBattle ${SRC_FILES} ${HEADER_FILES})
 
 
 
+
 # インクルードディレクトリ
 target_include_directories(ClashBattle PRIVATE
     ${CMAKE_SOURCE_DIR}/include
@@ -53,7 +64,7 @@ target_include_directories(ClashBattle PRIVATE
     ${CMAKE_SOURCE_DIR}/External/GLAD/include
     ${CMAKE_SOURCE_DIR}/External/GLM
     ${CMAKE_SOURCE_DIR}/External/stb
-
+    ${CMAKE_SOURCE_DIR}/External/Assimp/include
 
 )
 
@@ -67,5 +78,13 @@ file(COPY "${CMAKE_SOURCE_DIR}/Assets" DESTINATION "${CMAKE_BINARY_DIR}")
 target_link_libraries(ClashBattle
     glfw
     glad
+    assimp
     opengl32
+)
+
+
+add_custom_command(TARGET ClashBattle POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${ASSIMP_DLL}"
+        "$<TARGET_FILE_DIR:ClashBattle>"
 )
