@@ -6,7 +6,8 @@
 ## **window**
 * ~~Automatically adjust the viewport and object size based on the window size~~(2025/04/15)
 
-
+## **Structure**
+* Introduce namespaces to prevent name duplication between classes and improve readability.
 
 
 ## **user input**
@@ -15,8 +16,9 @@
 
 
 ## **drawing**
-* Load 3D models
-
+* ~~Load 3D models~~(2025/04/17)
+* Create a system to pass 3D model textures to shaders
+* Integrate `mesh.Draw(render)` called in mode.cpp into the drawing process in `RenderSystem.cpp`
 
 
 ## **Lighting**

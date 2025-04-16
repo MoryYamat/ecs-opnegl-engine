@@ -27,6 +27,8 @@
 
 #include "RenderSystem.h"
 
+#include "model.h"
+
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
@@ -250,20 +252,22 @@ int main()
 	Entity e2 = ecs.createEntity();
 
 	//Transform登録
-	Transform transform;
-	transform.position = glm::vec3(0.0f, 0.0f, -10.0f);
-	ecs.addComponent<Transform>(e1, transform);
+	TransformComponent transformComponent;
+	transformComponent.position = glm::vec3(0.0f, 0.0f, -10.0f);
+	ecs.addComponent<TransformComponent>(e1, transformComponent);
 
-	transform.position = glm::vec3(2.0f, 0.0f, -10.0f);
-	ecs.addComponent<Transform>(e2, transform);
+	transformComponent.position = glm::vec3(2.0f, 0.0f, -10.0f);
+	ecs.addComponent<TransformComponent>(e2, transformComponent);
 
 	//Mesh登録
-	Mesh mesh;
-	mesh.vao = VAO;
-	mesh.vbo = VBO;
-	mesh.vertextCount = 36;
-	ecs.addComponent<Mesh>(e1, mesh);
-	ecs.addComponent<Mesh>(e2, mesh);
+	//Mesh mesh;
+	//mesh.vao = VAO;
+	//mesh.vbo = VBO;
+	//mesh.vertexCount = 36;
+	//ecs.addComponent<Mesh>(e1, mesh);
+	//ecs.addComponent<Mesh>(e2, mesh);
+
+	Model testModel("Assets/Models/Ch44_nonPBR.fbx");
 
 	//====================================================================================
 	// ECS テスト領域 終了
@@ -296,7 +300,13 @@ int main()
 
 		//オブジェクトを描画
 		shader.use();
-		shader.setInt("ourTexture", 0);
+		//shader.setInt("ourTexture", 0);
+
+		glm::mat4 modelMat = glm::mat4(1.0f);
+		modelMat = glm::scale(modelMat, glm::vec3(0.01f));
+		shader.setMat4("model", modelMat);
+
+		testModel.Draw(shader);
 
 		//ビュー変換行列
 		glm::mat4 view = camera.GetViewMatrix();

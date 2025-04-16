@@ -9,6 +9,7 @@
 
 #include "Shader.h"
 
+
 #define MAX_BONE_INFLUENCE 4
 
 // モデル頂点データ
