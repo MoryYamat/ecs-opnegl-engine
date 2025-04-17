@@ -21,11 +21,11 @@
 #include <assimp/postprocess.h>
 
 // ECS
-#include "Entity.h"
-#include "ECS.h"
-#include "Component.h"
+#include "ECS/Entity.h"
+#include "ECS/ECS.h"
+#include "ECS/Component/Component.h"
 
-#include "RenderSystem.h"
+#include "ECS/System/RenderSystem.h"
 
 #include "model.h"
 
@@ -114,41 +114,6 @@ static bool escapeKeyPressedLastFrame = false;
 
 int main()
 {
-	//=================================================
-	// Assimpテスト
-	//=================================================
-	//Assimp::Importer importer;
-	//
-	//// モデルを読み込むパス
-	//const std::string modelPath = "Assets/Models/Ch44_nonPBR.fbx";
-
-	////モデルを読み込む(UV反転+ 三角形化)
-	//const aiScene* scene = importer.ReadFile(modelPath,
-	//	aiProcess_Triangulate | aiProcess_FlipUVs);
-
-	//// 読み込みチェック
-	//if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-	//	std::cerr << "Assimp  error: " << importer.GetErrorString() << std::endl;
-	//	return -1;
-	//}
-
-	////情報出力
-	//std::cout << "Model loaded" << modelPath << std::endl;
-	//std::cout << "Number of meshes: " << scene->mNumMeshes << std::endl;
-
-	//for (unsigned int i = 0; i < scene->mNumMeshes; ++i) {
-	//	aiMesh* mesh = scene->mMeshes[i];
-	//	std::cout << "Mesh " << i << ": " << mesh->mNumVertices << "vertices" << std::endl;
-	//}
-
-	//return 0;
-
-	//=================================================
-	// Assimp
-	//=================================================
-
-
-	//std::cout << "Current Path: " << std::filesystem::current_path() << std::endl;
 
 	//GLFW初期化
 	if (!glfwInit()) {
@@ -193,30 +158,30 @@ int main()
 	Shader shader("shaders/basic.vertex.glsl", "shaders/basic.fragment.glsl");
 
 	// VAOとVBOを生成
-	unsigned int VAO, VBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
+	//unsigned int VAO, VBO;
+	//glGenVertexArrays(1, &VAO);
+	//glGenBuffers(1, &VBO);
 
-	glBindVertexArray(VAO);
+	//glBindVertexArray(VAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
 
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	//unsigned int texture;
+	//glGenTextures(1, &texture);
+	//glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load("Assets/Textures/container.jpg", &width, &height, &nrChannels, 0);
@@ -267,6 +232,11 @@ int main()
 	//ecs.addComponent<Mesh>(e1, mesh);
 	//ecs.addComponent<Mesh>(e2, mesh);
 
+	// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
+	// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
+	// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
+	// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
+	// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 	Model testModel("Assets/Models/Ch44_nonPBR.fbx");
 
 	//====================================================================================
@@ -296,7 +266,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//描画処理
-		glBindTexture(GL_TEXTURE_2D, texture);
+		//glBindTexture(GL_TEXTURE_2D, texture);
 
 		//オブジェクトを描画
 		shader.use();
@@ -306,6 +276,11 @@ int main()
 		modelMat = glm::scale(modelMat, glm::vec3(0.01f));
 		shader.setMat4("model", modelMat);
 
+		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
+		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
+		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
+		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
+		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 		testModel.Draw(shader);
 
 		//ビュー変換行列

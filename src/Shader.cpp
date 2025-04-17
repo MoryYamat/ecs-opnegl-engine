@@ -1,9 +1,6 @@
 #pragma once
-#include "../include/Shader.h"
+#include "Shader.h"
 
-// =================================================================
-// include問題あり。Cmake修正の必要あり:相対パス指定がうまくいっていない
-// =================================================================
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {

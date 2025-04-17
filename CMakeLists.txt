@@ -59,7 +59,7 @@ add_executable(ClashBattle ${SRC_FILES} ${HEADER_FILES})
 
 # インクルードディレクトリ
 target_include_directories(ClashBattle PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/External/GLFW/include
     ${CMAKE_SOURCE_DIR}/External/GLAD/include
     ${CMAKE_SOURCE_DIR}/External/GLM

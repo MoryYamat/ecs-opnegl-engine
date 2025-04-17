@@ -18,7 +18,7 @@
 ## **drawing**
 * ~~Load 3D models~~(2025/04/17)
 * Create a system to pass 3D model textures to shaders
-* Integrate `mesh.Draw(render)` called in mode.cpp into the drawing process in `RenderSystem.cpp`
+* Integrate `mesh.Draw(render)` called in `model.cpp` into the drawing process in `RenderSystem.cpp`
 
 
 ## **Lighting**
@@ -29,4 +29,15 @@
 
 # **Game**
 
-## 
+## **camera**
+* Converting Euler angles to Quaternions
+
+---
+
+# **others**
+
+## **docs**
+* Draw and organize UML diagrams (class diagrams)
+
+## **Project**
+* ~~Organize folder structure~~(2025/04/18)
