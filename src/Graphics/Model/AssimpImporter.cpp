@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stb_image.h>
 
-#include "ImageLoader.h"
+#include "Core/Image/ImageLoader.h"
 
 
 AssimpImporter::AssimpImporter()

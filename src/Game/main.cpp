@@ -12,7 +12,7 @@
 #include <filesystem>
 
 
-#include "Shader.h"
+#include "Graphics/Renderer/Shader.h"
 #include "Camera.h"
 
 // assimip
@@ -21,17 +21,17 @@
 #include <assimp/postprocess.h>
 
 // ECS
-#include "ECS/Entity.h"
-#include "ECS/ECS.h"
-#include "ECS/Component/TransformComponent.h"
+#include "Core/ECS/Entity.h"
+#include "Core/ECS/ECS.h"
+#include "Core/ECS/Component/TransformComponent.h"
 
-#include "ECS/System/RenderSystem.h"
+#include "Graphics/Renderer/RenderSystem.h"
 
 //#include "model.h"
 
-#include "AssimpImporter.h"
+#include "Graphics/Model/AssimpImporter.h"
 
-#include "ModelData.h"
+#include "Graphics/Model/ModelData.h"
 
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
@@ -243,6 +243,7 @@ int main()
 	AssimpImporter importer;
 	ModelData model = importer.Import("Assets/Models/Ch44_nonPBR.fbx");
 
+	std::cout << "modelVerticesPos.x: " << model.meshes[0].vertices[0].position.x << std::endl;
 
 	//Mesh登録
 	//Mesh mesh;

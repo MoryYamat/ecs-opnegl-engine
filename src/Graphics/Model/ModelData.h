@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include "ImageData.h"
+#include "Core/Image/ImageData.h"
 
 #define MAX_BONE_INFLUENCE 4
 

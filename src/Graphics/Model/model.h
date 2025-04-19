@@ -16,7 +16,7 @@
 #include <vector>
 
 #include "Mesh.h"
-#include "Shader.h"
+#include "Graphics/Renderer/Shader.h"
 
 class Model {
 public:
