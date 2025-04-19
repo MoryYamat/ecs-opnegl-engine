@@ -35,6 +35,8 @@ public:
 	// Draw
 	void Draw(Shader& shader);
 
+	const std::vector<Mesh> getMeshes() const { return meshes; }
+
 private:
 	void loadModel(std::string const& filepath);
 

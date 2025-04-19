@@ -23,11 +23,15 @@
 // ECS
 #include "ECS/Entity.h"
 #include "ECS/ECS.h"
-#include "ECS/Component/Component.h"
+#include "ECS/Component/TransformComponent.h"
 
 #include "ECS/System/RenderSystem.h"
 
-#include "model.h"
+//#include "model.h"
+
+#include "AssimpImporter.h"
+
+#include "ModelData.h"
 
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
@@ -204,6 +208,8 @@ int main()
 	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+	//Model testModel("Assets/Models/Ch44_nonPBR.fbx");
+
 
 
 	//====================================================================================
@@ -214,15 +220,29 @@ int main()
 	ECS ecs;
 
 	Entity e1 = ecs.createEntity();
-	Entity e2 = ecs.createEntity();
+	Entity testmodel = ecs.createEntity();
 
 	//Transform登録
 	TransformComponent transformComponent;
-	transformComponent.position = glm::vec3(0.0f, 0.0f, -10.0f);
+	transformComponent.position = glm::vec3(4.0f, 4.0f, -10.0f);
+
+
 	ecs.addComponent<TransformComponent>(e1, transformComponent);
 
-	transformComponent.position = glm::vec3(2.0f, 0.0f, -10.0f);
-	ecs.addComponent<TransformComponent>(e2, transformComponent);
+	transformComponent.position = glm::vec3(0.0f, 0.0f, 0.0f);
+	ecs.addComponent<TransformComponent>(testmodel, transformComponent);
+
+	/*const Mesh& mesh = testModel.getMeshes()[0];
+
+	MeshComponent modelMesh;
+	modelMesh.vao = mesh.VAO;
+	modelMesh.vertexCount = static_cast<int>(mesh.indices.size());
+	ecs.addComponent<MeshComponent>(testmodel, modelMesh);*/
+
+	//AssimpImporter::Import("Assets/Models/Ch44_nonPBR.fbx");
+	AssimpImporter importer;
+	ModelData model = importer.Import("Assets/Models/Ch44_nonPBR.fbx");
+
 
 	//Mesh登録
 	//Mesh mesh;
@@ -237,7 +257,8 @@ int main()
 	// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 	// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 	// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
-	Model testModel("Assets/Models/Ch44_nonPBR.fbx");
+
+	
 
 	//====================================================================================
 	// ECS テスト領域 終了
@@ -281,7 +302,7 @@ int main()
 		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
-		testModel.Draw(shader);
+		//testModel.Draw(shader);
 
 		//ビュー変換行列
 		glm::mat4 view = camera.GetViewMatrix();

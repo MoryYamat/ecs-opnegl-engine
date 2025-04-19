@@ -1,6 +1,8 @@
 #include "model.h"
 #include <stb_image.h>
 
+// 全部入れ子になってる
+
 Model::Model(std::string const& filepath, bool gamma)
 	: gammaCorrection(gamma)
 {
@@ -43,18 +45,22 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 {
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
+		// プリミティブ
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		// 
 		meshes.push_back(processMesh(mesh, scene));
 	}
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
+		// 再帰
 		processNode(node->mChildren[i], scene);
 	}
 }
 
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 {
+	//　頂点データ
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;

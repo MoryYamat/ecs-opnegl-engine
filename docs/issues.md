@@ -13,7 +13,8 @@
 ## **user input**
 * ~~Release mouse capture when the Control key is pressed~~(2025/04/15)
 
-
+## **Asset**
+* Implement an asset manager to centralize asset management
 
 ## **drawing**
 * ~~Load 3D models~~(2025/04/17)
