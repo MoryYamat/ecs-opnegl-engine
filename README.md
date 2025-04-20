@@ -24,4 +24,4 @@
 4. -> Create `Entity` and assign `Component`
 5. -> `Draw`
 
-![現状の成果](Images/readme_01.png)
+![現状の成果](images/readme_01.png)
