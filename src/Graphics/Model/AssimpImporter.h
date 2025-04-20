@@ -34,8 +34,8 @@ private:
 
 	MeshData processMesh(aiMesh* mesh, const aiScene* scene);
 
-	std::vector<TextureData> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+	std::vector<TextureData> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
 
-	unsigned int textureFromFile(const char* path, const std::string& directory, bool gamma = false);
+	//unsigned int textureFromFile(const char* path, const std::string& directory, bool gamma = false);
 
 };

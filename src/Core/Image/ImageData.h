@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-
+// 画像用データ構造体
 struct RawImage {
 	unsigned char* data = nullptr;
 	int width = 0;
@@ -10,6 +10,6 @@ struct RawImage {
 	std::string path;
 
 	~RawImage() {
-
+		//if (data) stbi_image_free(data);
 	}
 };

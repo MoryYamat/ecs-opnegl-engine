@@ -13,7 +13,7 @@
 
 
 #include "Graphics/Renderer/Shader.h"
-#include "Camera.h"
+#include "Game/Camera.h"
 
 // assimip
 #include <assimp/Importer.hpp>
@@ -30,7 +30,7 @@
 //#include "model.h"
 
 #include "Graphics/Model/AssimpImporter.h"
-
+#include "Graphics/Model/ModelRegistry.h"
 #include "Graphics/Model/ModelData.h"
 
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
@@ -243,7 +243,10 @@ int main()
 	AssimpImporter importer;
 	ModelData model = importer.Import("Assets/Models/Ch44_nonPBR.fbx");
 
-	std::cout << "modelVerticesPos.x: " << model.meshes[0].vertices[0].position.x << std::endl;
+	ModelRegistry registry;
+	registry.RegisterModelToECS(ecs, model);
+
+	//std::cout << "modelVerticesPos.x: " << model.meshes[0].vertices[0].position.x << std::endl;
 
 	//Mesh登録
 	//Mesh mesh;
@@ -320,7 +323,7 @@ int main()
 		//model = glm::translate(model, cubePositions[0]);
 		//shader.setMat4("model", model);
 
-		RenderSystem(ecs, shader, view, projection);
+		RenderSystem(ecs, shader, view, projection, camera);
 
 
 

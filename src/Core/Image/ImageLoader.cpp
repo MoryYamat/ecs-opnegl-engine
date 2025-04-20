@@ -2,6 +2,7 @@
 #include <stb_image.h>
 #include <iostream>
 
+//utility
 RawImage loadImageFromFile(const std::string& path)
 {
 	RawImage img;

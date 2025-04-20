@@ -24,8 +24,8 @@ struct Vertex {
 	glm::vec3 tangent;
 	glm::vec3 bitangent;
 
-	int boneIDs[MAX_BONE_INFLUENCE];
-	float weights[MAX_BONE_INFLUENCE];
+	int boneIDs[MAX_BONE_INFLUENCE] = { 0 };
+	float weights[MAX_BONE_INFLUENCE] = { 0 };
 };
 
 // meshdata(VAOなど描画に必要な情報を含む)
@@ -33,16 +33,22 @@ struct MeshData {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
-	int textureIndex; // index into ModelData::textures
+	int materialIndex;
+};
+
+struct MaterialData {
+	std::vector<TextureData> textures;
+	glm::vec3 baseColor = glm::vec3(1.0f);
+	float shininess = 32.0f;
 };
 
 // モデルデータ: 複数のメッシュとその関連テクスチャ群
 struct ModelData {
 	std::vector<MeshData> meshes;
-	std::vector<TextureData> textures;
+	std::vector<MaterialData> materials;
 
 	//ロード成否フラグ
-	bool isValid = true;
+	//bool isValid = true;
 };
 
 

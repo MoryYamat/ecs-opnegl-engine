@@ -11,4 +11,5 @@ struct MeshComponent {
 	GLuint ebo = 0;
 
 	int vertexCount = 0;
+	bool hasIndices = true;
 };

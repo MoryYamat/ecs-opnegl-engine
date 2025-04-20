@@ -15,11 +15,15 @@
 
 ## **Asset**
 * Implement an asset manager to centralize asset management
+* **Optimize model loading process**
+* Asset Manager Implementation
 
 ## **drawing**
 * ~~Load 3D models~~(2025/04/17)
-* Create a system to pass 3D model textures to shaders
-* Integrate `mesh.Draw(render)` called in `model.cpp` into the drawing process in `RenderSystem.cpp`
+* ~~Create a system to pass 3D model textures to shaders~~(2025/04/21)
+* ~~Integrate `mesh.Draw(render)` called in `model.cpp` into the drawing process in `RenderSystem.cpp`~~(2025/04/21)
+* **Fix for normal vector processing in shaders**
+* Implementing 3D model animation
 
 
 ## **Lighting**
