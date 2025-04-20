@@ -16,3 +16,12 @@
 - GLM
 - stb
 
+
+## **2025/04/21: Create a 3D model import pipeline**
+1. Import 3D model with `Assimp`
+2. -> Convert to `Intermediate data`
+3. -> Convert data to `Component`
+4. -> Create `Entity` and assign `Component`
+5. -> `Draw`
+
+![現状の成果](Images/readme_01.png)
