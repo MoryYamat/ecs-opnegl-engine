@@ -1,5 +1,7 @@
 ﻿#include "AssimpImporter.h"
 #include <iostream>
+
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #include "Core/Image/ImageLoader.h"
@@ -9,12 +11,21 @@ AssimpImporter::AssimpImporter()
 {
 }
 
+AssimpImporter::~AssimpImporter()
+{
+	std::cout << "[AssimpImporter] destroyed" << std::endl;
+}
+
 ModelData AssimpImporter::Import(const std::string& path)
 {
 	modelData = ModelData();
 
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	const aiScene* scene = importer.ReadFile(path, 
+								aiProcess_Triangulate | 
+								aiProcess_GenSmoothNormals | 
+								aiProcess_FlipUVs | 
+								aiProcess_CalcTangentSpace);
 	// エラー処理(error handling)
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -30,7 +41,7 @@ ModelData AssimpImporter::Import(const std::string& path)
 
 	directory = path.substr(0, path.find_last_of('/'));
 
-	std::cout << "MODELS DIRECTORY :" << directory << std::endl;
+	//std::cout << "MODELS DIRECTORY :" << directory << std::endl;
 
 	processNode(scene->mRootNode, scene);
 
@@ -131,6 +142,8 @@ MeshData AssimpImporter::processMesh(aiMesh* mesh, const aiScene* scene)
 			vector.z = mesh->mBitangents[i].z;
 			vertex.bitangent = vector;
 
+			//std::cout << mesh->mBitangents[i].x << std::endl;
+
 			//std::cout << "vertex info num: " << i << "times" <<  std::endl;
 		}
 		else {
@@ -185,6 +198,7 @@ MeshData AssimpImporter::processMesh(aiMesh* mesh, const aiScene* scene)
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 
+
 	// ======== MaterialData ============
 	MaterialData mat;
 	mat.textures.insert(mat.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
@@ -204,6 +218,15 @@ MeshData AssimpImporter::processMesh(aiMesh* mesh, const aiScene* scene)
 std::vector<TextureData> AssimpImporter::loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName, const aiScene* scene)
 {
 	std::vector<TextureData> textures;
+
+
+	//std::cout << "=== Material Texture Types ===" << std::endl;
+	//for (int type = aiTextureType_NONE; type <= aiTextureType_UNKNOWN; ++type) {
+	//	if (material->GetTextureCount((aiTextureType)type) > 0) {
+	//		std::cout << "Found texture type: " << type << " (Count: "
+	//			<< material->GetTextureCount((aiTextureType)type) << ")" << std::endl;
+	//	}
+	//}
 
 
 	unsigned int count = material->GetTextureCount(type);
@@ -240,7 +263,7 @@ std::vector<TextureData> AssimpImporter::loadMaterialTextures(aiMaterial* materi
 		// 埋め込みテクスチャの場合
 		if (texPath[0] == '*')
 		{
-			std::cout << "[埋め込み] テクスチャ: " << texPath << std::endl;
+			//std::cout << "[埋め込み] テクスチャ: " << texPath << std::endl;
 
 			int index = std::stoi(texPath.substr(1));
 			const aiTexture* tex = scene->mTextures[index];
@@ -257,7 +280,7 @@ std::vector<TextureData> AssimpImporter::loadMaterialTextures(aiMaterial* materi
 				img.channels = ch;
 				img.path = texPath;
 				texture.image = img;
-				std::cout << "Embedded texture loaded: " << texPath << std::endl;
+				//std::cout << "Embedded texture loaded: " << texPath << std::endl;
 			}
 			else
 			{
@@ -266,7 +289,7 @@ std::vector<TextureData> AssimpImporter::loadMaterialTextures(aiMaterial* materi
 		}
 		else// 外部テクスチャの場合。(現在はUnityで埋め込みテクスチャを展開して強制的にコピーを手動でとってきている)
 		{
-			std::cout << "[外部]  テクスチャ：" << texPath << std::endl;
+			//std::cout << "[外部]  テクスチャ：" << texPath << std::endl;
 
 			// [修正][修正][修正] :::もっと柔軟性を上げる必要あり::: [修正][修正][修正]
 			// [修正][修正][修正] :::もっと柔軟性を上げる必要あり::: [修正][修正][修正]
@@ -280,7 +303,7 @@ std::vector<TextureData> AssimpImporter::loadMaterialTextures(aiMaterial* materi
 			if (img.data)
 			{
 				texture.image = img;
-				std::cout << "External texture loaded: " << fullPath << std::endl;
+				//std::cout << "External texture loaded: " << fullPath << std::endl;
 			}
 			else
 			{

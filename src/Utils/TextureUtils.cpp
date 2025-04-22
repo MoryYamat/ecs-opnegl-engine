@@ -32,7 +32,7 @@ namespace TextureUtils {
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		std::cout << "Uploaded texture to GPU: " << image.path << "(id = " << textureID << ")" << std::endl;
+		//std::cout << "Uploaded texture to GPU: " << image.path << "(id = " << textureID << ")" << std::endl;
 
 
 		return textureID;

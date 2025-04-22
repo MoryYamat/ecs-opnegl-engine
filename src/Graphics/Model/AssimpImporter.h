@@ -15,6 +15,9 @@ public:
 	// «—ˆ“I‚É‚ÍAgammaCorrection ‚ğg‚¢‚½‚¢...
 	AssimpImporter();
 
+	// ƒƒ‚ƒŠ‰ğ•ú‚ğŒø—¦‰»‚µ‚½‚¢
+	~AssimpImporter();
+
 	ModelData Import(std::string const& path);
 
 

@@ -6,6 +6,11 @@
 namespace GPUBufferUtils {
 	MeshComponent createMeshComponentFromMeshData(const MeshData& mesh) 
 	{
+		//std::cout << "Vertex Size: " << sizeof(Vertex) << std::endl;
+		//std::cout << "Offset tangent: " << offsetof(Vertex, tangent) << std::endl;
+		//std::cout << "Offset bitangent: " << offsetof(Vertex, bitangent) << std::endl;
+
+
 		MeshComponent component;
 
 		glGenVertexArrays(1, &component.vao);
@@ -30,33 +35,33 @@ namespace GPUBufferUtils {
 		}
 
 
-		GLsizei stride = sizeof(Vertex);
+		const GLsizei stride = sizeof(Vertex);
 
 		// layout(location = 0) position
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, position));
 
-		// layout(location = 1) position
+		// layout(location = 1) 
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, normal));
 
-		// layout(location = 2) position
+		// layout(location = 2) 
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, texCoords));
 
-		// layout(location = 3) position
+		// layout(location = 3) 
 		glEnableVertexAttribArray(3);
 		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, tangent));
 
-		// layout(location = 4) position
+		// layout(location = 4)
 		glEnableVertexAttribArray(4);
 		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, bitangent));
 
-		// layout(location = 5) position
+		// layout(location = 5) 
 		glEnableVertexAttribArray(5);
 		glVertexAttribPointer(5, 4, GL_INT, GL_FALSE, stride, (void*)offsetof(Vertex, boneIDs));
 
-		// layout(location = 6) position
+		// layout(location = 6) 
 		glEnableVertexAttribArray(6);
 		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, weights));
 

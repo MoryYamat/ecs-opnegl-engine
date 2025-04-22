@@ -24,7 +24,7 @@ void ModelRegistry::RegisterModelToECS(ECS& ecs, const ModelData& model)
 		transform.position = glm::vec3(0.0f);
 		transform.rotation = glm::vec3(0.0f);
 		transform.scale = glm::vec3(0.01f);
-
+		
 		ecs.addComponent<TransformComponent>(e, transform);
 
 		// MeshComponent“o˜^
@@ -52,7 +52,7 @@ void ModelRegistry::RegisterModelToECS(ECS& ecs, const ModelData& model)
 
 
 		ecs.addComponent<MaterialComponent>(e, matComp);
-		std::cout << "add MaterialComponent to ecs" << std::endl;
+		//std::cout << "add MaterialComponent to ecs" << std::endl;
 	}
 
 }

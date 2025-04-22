@@ -8,15 +8,21 @@
 
 ## **Structure**
 * Introduce namespaces to prevent name duplication between classes and improve readability.
-
+* Implementing an entity hierarchy
+* Refactor to "safe release design"
 
 ## **user input**
 * ~~Release mouse capture when the Control key is pressed~~(2025/04/15)
+* Input abstraction for greater flexibility
+* ~~When moving and rotating with WASD, the viewpoint feels strange.~~(2025/04/22)
+    * -> Abolished `mouse_callback()`. Centralized mouse coordinate acquisition in InputMapping.
 
 ## **Asset**
 * Implement an asset manager to centralize asset management
 * **Optimize model loading process**
 * Asset Manager Implementation
+* Management of intermediate data (storage and release)
+
 
 ## **drawing**
 * ~~Load 3D models~~(2025/04/17)
@@ -29,13 +35,13 @@
 ## **Lighting**
 * Add lighting support
 
-
 ---
 
 # **Game**
 
 ## **camera**
 * Converting Euler angles to Quaternions
+* Implement CameraComponent
 
 ---
 

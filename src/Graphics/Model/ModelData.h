@@ -15,6 +15,18 @@ struct TextureData {
 	std::string type;
 	std::string path;
 	RawImage image;// 実体...
+
+
+	//将来的に
+	//// ムーブ対応だけさせる
+	//TextureData() = default;
+	//TextureData(TextureData&&) noexcept = default;
+	//TextureData& operator=(TextureData&&) noexcept = default;
+
+	//// コピーは禁止
+	//TextureData(const TextureData&) = delete;
+	//TextureData& operator=(const TextureData&) = delete;
+
 };
 
 struct Vertex {

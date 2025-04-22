@@ -5,7 +5,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 #include <iostream>
@@ -23,11 +22,18 @@
 // ECS
 #include "Core/ECS/Entity.h"
 #include "Core/ECS/ECS.h"
+
 #include "Core/ECS/Component/TransformComponent.h"
+#include "Core/ECS/Component/CameraComponent.h"
 
 #include "Graphics/Renderer/RenderSystem.h"
 
 //#include "model.h"
+
+#include "Game/Camera/CameraControlSystem.h"
+
+#include "Game/Input/InputMapping.h"
+#include "Game/Input/InputState.h"
 
 #include "Graphics/Model/AssimpImporter.h"
 #include "Graphics/Model/ModelRegistry.h"
@@ -40,10 +46,13 @@
 const unsigned int WIDTH = 1280;
 const unsigned int HEIGHT = 760;
 
+InputState inputState;
+InputMapping inputMapping;
 
+void resetInputState(InputState& inputState);
 
 //Camera
-Camera camera = Camera();
+//Camera camera = Camera();
 float lastX = WIDTH / 2.0f;
 float lastY = HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -55,58 +64,8 @@ glm::mat4 projection;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-// テスト用頂点データ
-float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-};
-
-glm::vec3 cubePositions[] = {
-	glm::vec3(0.0f, 0.0f, 0.0f)
-};
-
 //
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
 
 // callbacks
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
@@ -142,6 +101,7 @@ int main()
 	glfwMakeContextCurrent(window);
 
 
+	// glfw: callback
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
@@ -222,6 +182,7 @@ int main()
 	Entity e1 = ecs.createEntity();
 	Entity testmodel = ecs.createEntity();
 
+
 	//Transform登録
 	TransformComponent transformComponent;
 	transformComponent.position = glm::vec3(4.0f, 4.0f, -10.0f);
@@ -232,14 +193,21 @@ int main()
 	transformComponent.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	ecs.addComponent<TransformComponent>(testmodel, transformComponent);
 
-	/*const Mesh& mesh = testModel.getMeshes()[0];
 
-	MeshComponent modelMesh;
-	modelMesh.vao = mesh.VAO;
-	modelMesh.vertexCount = static_cast<int>(mesh.indices.size());
-	ecs.addComponent<MeshComponent>(testmodel, modelMesh);*/
+	//==============================Camera==============================
+	// CameraComponent
+	Entity cameraEntity = ecs.createEntity();
 
-	//AssimpImporter::Import("Assets/Models/Ch44_nonPBR.fbx");
+	TransformComponent camTransform;
+	camTransform.position = glm::vec3(0.0f, 0.0f, 10.0f);
+	camTransform.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	camTransform.scale = glm::vec3(1.0f);
+	ecs.addComponent<TransformComponent>(cameraEntity, camTransform);
+
+	ecs.addComponent<CameraComponent>(cameraEntity, CameraComponent{});
+
+	//==============================Camera===============================
+
 	AssimpImporter importer;
 	ModelData model = importer.Import("Assets/Models/Ch44_nonPBR.fbx");
 
@@ -276,8 +244,8 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		//input
-		processInput(window);
+
+
 
 		//window aspect
 
@@ -290,42 +258,20 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//描画処理
-		//glBindTexture(GL_TEXTURE_2D, texture);
-
-		//オブジェクトを描画
-		shader.use();
-		//shader.setInt("ourTexture", 0);
-
-		glm::mat4 modelMat = glm::mat4(1.0f);
-		modelMat = glm::scale(modelMat, glm::vec3(0.01f));
-		shader.setMat4("model", modelMat);
-
 		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
 		// Entityとして3Dモデルを登録して、そちらから描画を行えるように改良する。
-		//testModel.Draw(shader);
 
-		//ビュー変換行列
-		glm::mat4 view = camera.GetViewMatrix();
-		//投影行列
-		glm::mat4 projection = camera.GetProjectionMatrix(aspect);
+		inputMapping.update(window, inputState);
+		if (inputState.actions[InputAction::Quit]) break;
 
-		shader.setMat4("projection", projection);
+		GameSystem::CameraControlSystem(ecs, deltaTime, inputState);
 
-		shader.setMat4("view", view);
+		RenderSystem::RenderSystem(ecs, shader, aspect);
 
-
-
-		//glm::mat4 model = glm::mat4(1.0f);
-		//model = glm::translate(model, cubePositions[0]);
-		//shader.setMat4("model", model);
-
-		RenderSystem(ecs, shader, view, projection, camera);
-
-
+		resetInputState(inputState);
 
 		//---------------------------------------
 		// glfw: buffer
@@ -351,7 +297,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 	// 
 	aspect = static_cast<float>(width) / static_cast<float>(height);
-	camera.GetProjectionMatrix(aspect);
+	//camera.GetProjectionMatrix(aspect);
 	std::cout << "Changed Window size: "
 		<< " width: " << width
 		<< ", height: " << height
@@ -359,69 +305,64 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 }
 
-void processInput(GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
-	{
-		glfwSetWindowShouldClose(window, true);
-	}
-	// movement
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
-
-	// mouse capture 
-	int escapeKeyState = glfwGetKey(window, GLFW_KEY_ESCAPE);
-	if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && !escapeKeyPressedLastFrame)
-		if (mouseCaptured)
-		{
-			// Enable Moues Capture
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			mouseCaptured = false;
-
-			firstMouse = true;
-		}
-		else 
-		{
-			// Disable Mouse Capture
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-			mouseCaptured = true;
-		}
-
-	escapeKeyPressedLastFrame = (escapeKeyState == GLFW_PRESS);
-	//std::cout << "escapeKeyState:  " << escapeKeyState << std::endl;
-}
 
 
 // glfw: whenever the mouse moves, this callback is called
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-	float xpos = static_cast<float>(xposIn);
-	float ypos = static_cast<float>(yposIn);
+	//float xpos = static_cast<float>(xposIn);
+	//float ypos = static_cast<float>(yposIn);
 
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
+	//if (firstMouse)
+	//{
+	//	lastX = xpos;
+	//	lastY = ypos;
+	//	firstMouse = false;
+	//}
 
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos;
+	//float xoffset = xpos - lastX;
+	//float yoffset = lastY - ypos;
 
-	lastX = xpos;
-	lastY = ypos;
+	//lastX = xpos;
+	//lastY = ypos;
 
-	camera.ProcessMouseMovement(xoffset, yoffset);
+
+	//inputState.mouseDelta = glm::vec2(xoffset, yoffset);
+	//inputState.mousePosition = glm::vec2(xpos, ypos);
+
+	//camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	camera.ProcessMouseScroll(static_cast<float>(yoffset));
+	//camera.ProcessMouseScroll(static_cast<float>(yoffset));
+	//inputState.scrollDelta = static_cast<float>(yoffset);
 }
+
+void resetInputState(InputState& inputState)
+{
+	inputState.mouseDelta = glm::vec2(0.0f);
+	inputState.scrollDelta = 0.0f;
+}
+
+//==================================ECS=============================
+// Entity : ID
+// Component: Data
+// System : 特定のComponentの集合を持ったEntityの振る舞いを決める
+// 
+// 複数の`Component`で`Entity`の性質を定義 
+// -> `Component`の集合が概念を形作る
+//
+// その`概念`の振る舞いを定義するのが`System`
+// これによって、全ての`オブジェクト`の`振る舞い`を
+// `ECS`によって定義する
+//
+//
+// 意図した動作を保証するために、Entityを特徴づけるComponentを定義し、
+// それに沿ってSystemを作る必要がある。
+//
+//
+//
+//
+//==================================ECS=============================
