@@ -67,6 +67,7 @@ namespace GPUBufferUtils {
 
 		glBindVertexArray(0);
 
+		// 
 		component.vertexCount = component.hasIndices ?
 			static_cast<int>(mesh.indices.size()) :
 			static_cast<int>(mesh.vertices.size());

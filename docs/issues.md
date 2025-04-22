@@ -9,6 +9,9 @@
 ## **Structure**
 * Introduce namespaces to prevent name duplication between classes and improve readability.
 * Implementing an entity hierarchy
+    * -> Allows you to assign meaning to entities (add name attributes).
+    * -> **Parent Entity remembers its name**
+    * -> **Child Entity remembers its parent**
 * Refactor to "safe release design"
 
 ## **user input**
@@ -52,3 +55,13 @@
 
 ## **Project**
 * ~~Organize folder structure~~(2025/04/18)
+
+
+
+## **What I want to do next**
+
+* Adding ground
+* Introducing lights (phong or blinn-phong)
+* Animation support
+* Adding ground
+* Model hierarchy

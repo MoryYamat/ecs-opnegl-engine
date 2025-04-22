@@ -10,7 +10,7 @@
 #include "Utils/GPUBufferUtils.h"
 #include "Utils/TextureUtils.h"
 
-void ModelRegistry::RegisterModelToECS(ECS& ecs, const ModelData& model)
+void ModelRegistry::RegisterModelToECS(ECS& ecs, const ModelData& model, const glm::vec3& position, const glm::vec3 rotation, const glm::vec3& scale)
 {
 	for (const MeshData& mesh : model.meshes)
 	{
@@ -21,9 +21,9 @@ void ModelRegistry::RegisterModelToECS(ECS& ecs, const ModelData& model)
 		//[要修正]:::ここで位置やスケールを決めるのは明らかにおかしい:::[要修正]
 		//[要修正]:::ここで位置やスケールを決めるのは明らかにおかしい:::[要修正]
 		TransformComponent transform;
-		transform.position = glm::vec3(0.0f);
-		transform.rotation = glm::vec3(0.0f);
-		transform.scale = glm::vec3(0.01f);
+		transform.position = position;
+		transform.rotation = rotation;
+		transform.scale = scale;
 		
 		ecs.addComponent<TransformComponent>(e, transform);
 

@@ -11,33 +11,28 @@
 #include <filesystem>
 
 
-#include "Graphics/Renderer/Shader.h"
-#include "Game/Camera.h"
-
 // assimip
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-// ECS
+// Core/ECS
 #include "Core/ECS/Entity.h"
 #include "Core/ECS/ECS.h"
-
 #include "Core/ECS/Component/TransformComponent.h"
 #include "Core/ECS/Component/CameraComponent.h"
 
+// Graphincs
 #include "Graphics/Renderer/RenderSystem.h"
-
-//#include "model.h"
-
-#include "Game/Camera/CameraControlSystem.h"
-
-#include "Game/Input/InputMapping.h"
-#include "Game/Input/InputState.h"
-
 #include "Graphics/Model/AssimpImporter.h"
 #include "Graphics/Model/ModelRegistry.h"
 #include "Graphics/Model/ModelData.h"
+//#include "Graphics/Renderer/Shader.h"
+
+// Game
+#include "Game/Camera/CameraControlSystem.h"
+#include "Game/Input/InputMapping.h"
+#include "Game/Input/InputState.h"
 
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
 //ウィンドウの大きさに応じて描画範囲と大きさを変更
@@ -51,8 +46,7 @@ InputMapping inputMapping;
 
 void resetInputState(InputState& inputState);
 
-//Camera
-//Camera camera = Camera();
+
 float lastX = WIDTH / 2.0f;
 float lastY = HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -164,9 +158,7 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
 
 	//Model testModel("Assets/Models/Ch44_nonPBR.fbx");
 
@@ -208,13 +200,18 @@ int main()
 
 	//==============================Camera===============================
 
-	AssimpImporter importer;
-	ModelData model = importer.Import("Assets/Models/Ch44_nonPBR.fbx");
+	ModelData model_Ch44 = AssimpImporter().Import("Assets/Models/Ch44_nonPBR.fbx");
 
 	ModelRegistry registry;
-	registry.RegisterModelToECS(ecs, model);
+	//(ecs, mode, position, rotation, scale)
+	registry.RegisterModelToECS(ecs, model_Ch44, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(0.01f));
 
 	//std::cout << "modelVerticesPos.x: " << model.meshes[0].vertices[0].position.x << std::endl;
+
+	ModelData model_Vang = AssimpImporter().Import("Assets/Models/Vanguard By T. Choonyung.fbx");
+	registry.RegisterModelToECS(ecs, model_Vang, glm::vec3(0.0f, 0.0f, -5.0f), glm::vec3(0.0f), glm::vec3(0.01f));
+
+
 
 	//Mesh登録
 	//Mesh mesh;
@@ -301,7 +298,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	std::cout << "Changed Window size: "
 		<< " width: " << width
 		<< ", height: " << height
-		<< ", aspect: " << aspect;
+		<< ", aspect: " << aspect << std::endl;
 
 }
 
